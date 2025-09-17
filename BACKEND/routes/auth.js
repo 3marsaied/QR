@@ -9,17 +9,20 @@ const router = express.Router();
 router.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        
+
         var existingUser = await User.findOne({ email: email });
-        
+
         if (existingUser) {
             const isMatchUser = await verifyPassword(password, existingUser.password);
             if (isMatchUser) {
                 const user_id = existingUser._id;
-                const token = createAccessToken({user_id});
-                return res.json(token, 200, { message: "Login successful" });
+                const token = createAccessToken({ user_id });
+                return res.status(200).json({
+                    token: token,
+                    message: "Login successful"
+                });
             }
-            else{
+            else {
                 res.status(401).json({ message: "Invalid credentials" });
             }
         }
