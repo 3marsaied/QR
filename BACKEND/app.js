@@ -22,7 +22,7 @@ app.use(cors({
 const mongoURI = process.env.MONGOURI;
 
 mongoose.connect(mongoURI, { 
-    serverSelectionTimeoutMS: 5000,
+    serverSelectionTimeoutMS: 10000,
     socketTimeoutMS: 45000
 })
 .then(() => {
