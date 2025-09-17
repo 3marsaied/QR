@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ParamListBase } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useRouter } from 'expo-router';
-import '../global.css';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 
 type Props = {
   navigation?: NativeStackNavigationProp<ParamListBase>;
@@ -26,7 +25,10 @@ export default function WelcomeScreen({ navigation }: Props) {
       try {
         const { getToken } = await import('../utils/secureStore');
         const token = await getToken('authToken');
-        if (mounted && token) setFoundToken(token);
+        if (mounted && token) {
+          setFoundToken(token);
+          router.replace('/Home');
+        }
       } catch (err) {
         console.error('Error checking token', err);
       } finally {
@@ -37,7 +39,7 @@ export default function WelcomeScreen({ navigation }: Props) {
     return () => {
       mounted = false;
     };
-  }, [navigation]);
+  }, [navigation, router]);
 
   if (checking) {
     return (
@@ -52,13 +54,13 @@ export default function WelcomeScreen({ navigation }: Props) {
       <ThemedText type="title" className="text-3xl font-bold mb-2 text-black">
         Welcome to QR App!
       </ThemedText>
-      <ThemedText className="text-lg mb-10 text-center text-gray-600">
+      <ThemedText className="text-lg mb-10 text-center text-black">
         Please login or sign up to continue.
       </ThemedText>
 
       {foundToken ? (
         <View className="mb-8 items-center w-full">
-          <ThemedText className="text-xs text-gray-500">
+          <ThemedText className="text-xs text-black">
             Found auth token (masked):
           </ThemedText>
           <ThemedText className="text-xs my-2 text-black">
@@ -71,7 +73,7 @@ export default function WelcomeScreen({ navigation }: Props) {
             <TouchableOpacity
               className="bg-black py-2 px-4 rounded-lg"
               onPress={() => {
-                router.replace('/Home');
+                router.replace('./Home');
               }}
             >
               <ThemedText className="text-white font-medium">
@@ -97,7 +99,7 @@ export default function WelcomeScreen({ navigation }: Props) {
 
       <View className="flex-row space-x-4 justify-center mb-5 w-[80%]">
         <TouchableOpacity
-          className="bg-black py-3 px-8 rounded-xl w-full items-center"
+          className="bg-gray-200 py-3 px-8 rounded-xl w-full items-center"
           onPress={() => {
             router.push('/LoginScreen');
           }}
@@ -110,9 +112,9 @@ export default function WelcomeScreen({ navigation }: Props) {
 
       <View className="flex-row space-x-4 justify-center w-[80%]">
         <TouchableOpacity
-          className="bg-black py-3 px-8 rounded-xl w-full items-center"
+          className="bg-gray-200 py-3 px-8 rounded-xl w-full items-center"
           onPress={() => {
-            router.push('/signup');
+            router.push('./signup');
           }}
         >
           <ThemedText className="text-white text-lg font-semibold">
@@ -122,4 +124,4 @@ export default function WelcomeScreen({ navigation }: Props) {
       </View>
     </View>
   );
-}
+}ThemedText
