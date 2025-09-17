@@ -38,7 +38,8 @@ function loadRoutes(directory) {
   fs.readdirSync(directory).forEach((file) => {
       const filePath = path.join(directory, file);
       const route = require(filePath);
-      app.use('/api', route);
+      const routeName = path.basename(file, path.extname(file));
+      app.use(`/${routeName}`, route);
   });
 }
 const routesDirectory = path.join(__dirname, 'routes');
